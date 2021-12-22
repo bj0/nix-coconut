@@ -7,12 +7,8 @@
         pypiDataRev = "3948c3c729392348ee542a31a1bed92446e746be";
         pypiDataSha256 = "041rpjrwwa43hap167jy8blnxvpvbfil0ail4y4mar1q5f0q57xx";
     },
-
-    pkgs ? import (fetchTarball https://github.com/nixos/nixpkgs/archive/nixpkgs-unstable.tar.gz) {} }:
-
-let
     # make a python with updated coconut
-    mnPython = mach-nix.mkPython {
+    python ? mach-nix.mkPython {
         requirements = ''
             coconut>=1.6.0
             numpy
@@ -24,11 +20,13 @@ let
         '';
         ignoreCollisions = true;
         ignoreDataOutdated = true;
-    };
+    },
 
-in
+    pkgs ? import (fetchTarball https://github.com/nixos/nixpkgs/archive/nixpkgs-unstable.tar.gz) {} 
+}:
+
 pkgs.mkShell {
-    buildInputs = [ mnPython ];
+    buildInputs = [ python ];
 
     shellHook = ''
         jupyter console --kernel coconut

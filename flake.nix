@@ -20,11 +20,42 @@
     flake-utils.lib.eachDefaultSystem (system:
         let
             pkgs = import nixpkgs { inherit system; };
-        in {
+            
+        in rec {
+            packages = {
+                python = mach-nix.lib.${system}.mkPython {
+                    requirements = ''
+                        coconut>=1.6.0
+                        numpy
+                        pandas
+                        matplotlib
+                        networkx
+                        jupyter_client=6.1.12 # until jupyter-console releases a fix for client 7.x, we have to downgrade
+                        jupyter-console
+                    '';
+                    ignoreCollisions = true;
+                    ignoreDataOutdated = true;
+                };            
+
+            coconut = 
+            let
+                name = "coconut";
+                script = pkgs.writeShellScriptBin name ''
+                    jupyter console --kernel coconut
+                '';
+                in pkgs.symlinkJoin {
+                    inherit name;
+                    paths = [ script packages.python ];
+                    buildInputs = [ pkgs.makeWrapper ];
+                    postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
+                };
+
+            };
             devShell = (import ./shell.nix { 
                 inherit pkgs; 
                 mach-nix=mach-nix.lib.${system};
                 });
+            defaultPackage = packages.coconut;
         }
     );
 }

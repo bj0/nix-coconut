@@ -9,10 +9,7 @@
         url = "github:DavHau/mach-nix";
         inputs.nixpkgs.follows = "nixpkgs";
         inputs.flake-utils.follows = "flake-utils";
-        inputs.pypi-deps-db = {
-            url = "github:DavHau/pypi-deps-db";
-            flake = false;
-        };
+        inputs.pypi-deps-db.url = "github:DavHau/pypi-deps-db";
     };
    };
 

@@ -14,7 +14,7 @@
     };
    };
 
-   outputs = { self, nixpkgs, mach-nix, flake-utils }:
+   outputs = { self, nixpkgs, mach-nix, flake-utils, pypi-deps-db }:
     flake-utils.lib.eachDefaultSystem (system:
         let
             pkgs = import nixpkgs { inherit system; };

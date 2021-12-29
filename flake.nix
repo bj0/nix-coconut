@@ -5,16 +5,16 @@
 
    inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    pypi-deps-db.url = "github:DavHau/pypi-deps-db";
+    # pypi-deps-db.url = "github:DavHau/pypi-deps-db";
     mach-nix = {
         url = "github:DavHau/mach-nix";
         inputs.nixpkgs.follows = "nixpkgs";
         inputs.flake-utils.follows = "flake-utils";
-        inputs.pypi-deps-db.follows = "pypi-deps-db";
+        # inputs.pypi-deps-db.follows = "pypi-deps-db";
     };
    };
 
-   outputs = { self, nixpkgs, mach-nix, flake-utils, pypi-deps-db }:
+   outputs = { self, nixpkgs, mach-nix, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
         let
             pkgs = import nixpkgs { inherit system; };

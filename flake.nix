@@ -9,7 +9,7 @@
         url = "github:DavHau/mach-nix";
         inputs.nixpkgs.follows = "nixpkgs";
         inputs.flake-utils.follows = "flake-utils";
-        inputs.pypi-deps-db.url = "github:DavHau/pypi-deps-db/694d987fe6acf9bb272f000b4d4512a97d92f363";
+        inputs.pypi-deps-db.url = "github:DavHau/pypi-deps-db/913944cf70b9c2c3347ec5212960910a3f8f485f";
     };
    };
 
@@ -22,7 +22,7 @@
             packages = {
                 python = mach-nix.lib.${system}.mkPython {
                     requirements = ''
-                        coconut>=1.6.0
+                        coconut>=2.0.0
                         numpy
                         pandas
                         matplotlib

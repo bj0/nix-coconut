@@ -57,6 +57,7 @@
           };
 
           defaultPackage = coco;
+          defaultApp = coco;
         };
       };
     };

@@ -1,0 +1,84 @@
+{
+  "_generic": {
+    "defaultPackage": "coconut",
+    "invalidationHash": "d04583eb8764c871fdab8737d920f56e26c99c6c297cf73bd689a8aa2969d728",
+    "location": "",
+    "packages": {
+      "coconut": "3.0.2"
+    },
+    "sourcesAggregatedHash": null,
+    "subsystem": "python"
+  },
+  "_subsystem": {
+    "application": false,
+    "pythonAttr": "python310",
+    "sourceFormats": {
+      "Pygments": "wheel",
+      "cPyparsing": "wheel",
+      "prompt_toolkit": "wheel",
+      "psutil": "wheel",
+      "setuptools": "wheel",
+      "typing_extensions": "wheel",
+      "wcwidth": "wheel",
+      "wheel": "wheel"
+    }
+  },
+  "sources": {
+    "Pygments": {
+      "2.15.1": {
+        "hash": "sha256-2y2z3rS0F585mgkFSwI7alhrdkmdNpZYE8caqO17X9E=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/py3/P/Pygments/Pygments-2.15.1-py3-none-any.whl"
+      }
+    },
+    "cPyparsing": {
+      "2.4.7.2.1.1": {
+        "hash": "sha256-Ngad3z8/Fl+nd6PFfTfKjwaW/C1k8BneOl/4qmCKYgg=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/cp310/c/cPyparsing/cPyparsing-2.4.7.2.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      }
+    },
+    "prompt_toolkit": {
+      "3.0.39": {
+        "hash": "sha256-nf++HYrPkePedfO1ROSEI4L8Bsa6vpA6yay3TcbgjYg=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/py3/p/prompt_toolkit/prompt_toolkit-3.0.39-py3-none-any.whl"
+      }
+    },
+    "psutil": {
+      "5.9.5": {
+        "hash": "sha256-iVGBEmR/EnawPKl7Zcx/ZMpYex6wJ4ODAXwqDcwmy+Q=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/cp36/p/psutil/psutil-5.9.5-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      }
+    },
+    "setuptools": {
+      "68.0.0": {
+        "hash": "sha256-EeUsZ0FaOB0Q1rRiztnPuXBmF58OhxOZ4AbEqxAfyF8=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/py3/s/setuptools/setuptools-68.0.0-py3-none-any.whl"
+      }
+    },
+    "typing_extensions": {
+      "4.7.1": {
+        "hash": "sha256-RA1d06+TsGAXS/QzvM1psLq8OxWxqNykN4n9f2FRSzY=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.7.1-py3-none-any.whl"
+      }
+    },
+    "wcwidth": {
+      "0.2.6": {
+        "hash": "sha256-eVsTj2h1V3zZG7pSuvnkRc1RGP0ycjtGDjCgrzDqIw4=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/py2.py3/w/wcwidth/wcwidth-0.2.6-py2.py3-none-any.whl"
+      }
+    },
+    "wheel": {
+      "0.40.0": {
+        "hash": "sha256-0jayDny1ItryOQ+oTFXuqBxcMBkPkPKa4soa2DVb8kc=",
+        "type": "http",
+        "url": "https://files.pythonhosted.org/packages/py3/w/wheel/wheel-0.40.0-py3-none-any.whl"
+      }
+    }
+  }
+}

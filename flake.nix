@@ -1,60 +1,63 @@
 {
-   description = "Flake to manage python workspace";
-
    nixConfig.bash-prompt = "\\[\\033[01;32m\\]\\A| [nix] \\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\e[31m\\]\\[\\033[00m\\]$";
 
-   inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
-    mach-nix = {
-        url = "github:DavHau/mach-nix";
-        inputs.nixpkgs.follows = "nixpkgs";
-        inputs.flake-utils.follows = "flake-utils";
-        inputs.pypi-deps-db.url = "github:DavHau/pypi-deps-db/913944cf70b9c2c3347ec5212960910a3f8f485f";
-    };
-   };
+  inputs = {
+    dream2nix.url = "github:nix-community/dream2nix";
+    nixpkgs.follows = "dream2nix/nixpkgs";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    src.url = "github:evhub/coconut";
+    src.flake = false;
+  };
 
-   outputs = { self, nixpkgs, mach-nix, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-        let
-            pkgs = import nixpkgs { inherit system; };
-            
-        in rec {
-            packages = {
-                python = mach-nix.lib.${system}.mkPython {
-                    requirements = ''
-                        coconut>=2.0.0
-                        numpy
-                        pandas
-                        matplotlib
-                        networkx
-                        jupyter_client=6.1.12 # until jupyter-console releases a fix for client 7.x, we have to downgrade
-                        jupyter-console
-                    '';
-                    ignoreCollisions = true;
-                    ignoreDataOutdated = true;
-                };            
+  outputs = inputs@{self, dream2nix, flake-parts, src, ...}: flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["x86_64-linux"];
+      imports = [dream2nix.flakeModuleBeta];
 
-            coconut = 
-            let
-                name = "coconut";
-                script = pkgs.writeShellScriptBin name ''
-                    jupyter console --kernel coconut
-                '';
-                in pkgs.symlinkJoin {
-                    inherit name;
-                    paths = [ script packages.python ];
-                    buildInputs = [ pkgs.makeWrapper ];
-                    postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
-                };
-
+      perSystem = {
+        config,
+        system,
+        pkgs,
+        ...
+      }: {
+        dream2nix.inputs."coconut" = {
+          source = src;
+          projects.coconut = {
+              subsystem = "python";
+              translator = "pip";
+              subsystemInfo.pythonVersion = "3.10";
+              subsystemInfo.extraSetupDeps = [
+                "psutil"
+              ];
             };
-            devShell = (import ./shell.nix { 
-                inherit pkgs; 
-                mach-nix=mach-nix.lib.${system};
-                });
-            defaultPackage = packages.coconut;
-        }
-    );
-}
+          };
 
-        
+        packages = rec {
+          inherit (config.dream2nix.outputs.coconut.packages) coconut;
+          
+          python = (pkgs.python310.withPackages(ps: [
+            ps.psutil
+            ps.jupyter
+            ps.numpy
+            ps.pandas
+            ps.matplotlib
+            ps.networkx
+            coconut
+          ])).override (args: {ignoreCollisions = true; });
+
+          coco = let
+            name = "coco";
+            script = pkgs.writeShellScriptBin name ''
+                coconut --jupyter console
+            '';
+          in pkgs.symlinkJoin {
+              inherit name;
+              paths = [ script python ];
+              buildInputs = [ pkgs.makeWrapper ];
+              postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
+          };
+
+          default = coco;
+        };
+      };
+    };
+}

@@ -56,7 +56,7 @@
               postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
           };
 
-          default = coco;
+          defaultPackage = coco;
         };
       };
     };

@@ -2,39 +2,57 @@
    nixConfig.bash-prompt = "\\[\\033[01;32m\\]\\A| [nix] \\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\e[31m\\]\\[\\033[00m\\]$";
 
   inputs = {
-    dream2nix.url = "github:nix-community/dream2nix";
-    nixpkgs.follows = "dream2nix/nixpkgs";
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    src.url = "github:evhub/coconut";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+    src.url = "github:evhub/coconut/v3.1.0";
     src.flake = false;
   };
 
-  outputs = inputs@{self, dream2nix, flake-parts, src, ...}: flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux"];
-      imports = [dream2nix.flakeModuleBeta];
+  outputs = inputs@{self, nixpkgs, flake-utils, src, ...}: 
+    flake-utils.lib.eachDefaultSystem(system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+      in 
+      rec {
+        coconut = with pkgs.python3Packages; buildPythonPackage {
+            pname = "coconut";
+            version = "3.1.0";
+            pyproject = true;
+            
+            src = src;
 
-      perSystem = {
-        config,
-        system,
-        pkgs,
-        ...
-      }: {
-        dream2nix.inputs."coconut" = {
-          source = src;
-          projects.coconut = {
-              subsystem = "python";
-              translator = "pip";
-              subsystemInfo.pythonVersion = "3.10";
-              subsystemInfo.extraSetupDeps = [
-                "psutil"
-              ];
+            nativeBuildInputs = [ setuptools psutil ];
+
+            propagatedBuildInputs = [
+              anyio
+              async-generator
+              cpyparsing
+              mypy
+              pygments
+              prompt-toolkit
+              setuptools
+              watchdog
+            ];
+
+            nativeCheckInputs = [
+              pexpect
+              pytestCheckHook
+              tkinter
+            ];
+
+            meta = with pkgs.lib; {
+              description = "Simple, elegant, Pythonic functional programming";
+              homepage = "http://coconut-lang.org/";
+              changelog = "https://github.com/evhub/coconut/releases/tag/v${version}";
+              license = licenses.asl20;
+              maintainers = with maintainers; [ fabianhjr ];
             };
+
+            pytestFlagsArray = [ "coconut/tests/constants_test.py" ];
           };
 
         packages = rec {
-          inherit (config.dream2nix.outputs.coconut.packages) coconut;
-          
-          python = (pkgs.python310.withPackages(ps: [
+          python = (pkgs.python3.withPackages(ps: [
             ps.psutil
             ps.jupyter
             ps.numpy
@@ -47,18 +65,14 @@
           coco = let
             name = "coco";
             script = pkgs.writeShellScriptBin name ''
-                coconut --jupyter console
+                ${python}/bin/coconut --jupyter console
             '';
           in pkgs.symlinkJoin {
               inherit name;
-              paths = [ script python ];
+              paths = [ script ];
               buildInputs = [ pkgs.makeWrapper ];
               postBuild = "wrapProgram $out/bin/${name} --prefix PATH : $out/bin";
           };
-
-          defaultPackage = coco;
-          defaultApp = coco;
         };
-      };
-    };
+      });
 }

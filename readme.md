@@ -1,5 +1,14 @@
 # Launch a Coconut (jupyter) shell using nix
 
+im mainly using this just to get a quick coconut/ipython shell anywhere i have nix.  
+
+
+i originally created it because the version in nixpkgs was too old, but it's since caught up 
+and now i've simplified the flake to just use that.  all it does now is create a custom `coco` 
+that launches `coconut --jupyter console` and includes some useful python packages 
+like `numpy` and `pylab`.  i may update it in the future if i need a newer version (and dream2nix
+becomes more usable).
+
 ```
 nix run github:bj0/nix-coconut#coco
 ```

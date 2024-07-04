@@ -37,25 +37,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs",
-        "src": "src"
-      }
-    },
-    "src": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1709370735,
-        "narHash": "sha256-xlA/yryUXZCU56gJ0y7M9JHgWkvXiB09ywyf0sP1o+4=",
-        "owner": "evhub",
-        "repo": "coconut",
-        "rev": "41ac855fc98cce379d829390ae931c73485ff256",
-        "type": "github"
-      },
-      "original": {
-        "owner": "evhub",
-        "ref": "v3.1.0",
-        "repo": "coconut",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     },
     "systems": {
